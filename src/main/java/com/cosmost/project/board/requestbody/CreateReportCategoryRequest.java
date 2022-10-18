@@ -15,9 +15,7 @@ public class CreateReportCategoryRequest {
 
     private String reportCategoryName;
 
-    public ReportCategoryEntity reportCategoryDtoToEntity(String reportCategoryName,
-                                                          ReportEntity reportEntity){
-
+    public ReportCategoryEntity createCategoryDtoToEntity(String reportCategoryName, ReportEntity reportEntity){
         return ReportCategoryEntity.builder()
                 .report(reportEntity)
                 .reportCategoryName(reportCategoryName)
