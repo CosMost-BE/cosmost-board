@@ -1,15 +1,16 @@
 package com.cosmost.project.board.service;
 
-import com.cosmost.project.board.infrastructure.entity.ReportCategoryEntity;
+import com.cosmost.project.board.requestbody.UpdateReportRequest;
 import com.cosmost.project.board.infrastructure.entity.ReportEntity;
-import com.cosmost.project.board.requestbody.CreateReportCategoryRequest;
 import com.cosmost.project.board.requestbody.CreateReportRequest;
 
 public interface ReportService {
 
     void createReport(CreateReportRequest createReportRequest);
 
-    default ReportEntity reportDtoToEntity(CreateReportRequest createReportRequest){
+    void updateReport(Long id, UpdateReportRequest updateReportRequest);
+
+    default ReportEntity createDtoToEntity(CreateReportRequest createReportRequest){
 
         ReportEntity reportEntity = ReportEntity.builder()
                 .reporterId(createReportRequest.getReporterId())
@@ -19,6 +20,8 @@ public interface ReportService {
 
         return reportEntity;
     }
+
+
 
 
 

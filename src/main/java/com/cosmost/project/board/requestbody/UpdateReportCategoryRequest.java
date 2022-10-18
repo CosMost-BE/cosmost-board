@@ -11,12 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateReportCategoryRequest {
+public class UpdateReportCategoryRequest {
 
     private String reportCategoryName;
 
-    public ReportCategoryEntity createCategoryDtoToEntity(String reportCategoryName, ReportEntity reportEntity){
+    public ReportCategoryEntity updateCategoryDtoToEntity(String reportCategoryName, ReportEntity reportEntity){
         return ReportCategoryEntity.builder()
+                .id(reportEntity.getId())
                 .report(reportEntity)
                 .reportCategoryName(reportCategoryName)
                 .build();
