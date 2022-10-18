@@ -27,4 +27,9 @@ public class ReportControllerAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
+    @ExceptionHandler(ReportIdNotFoundException.class)
+    public ResponseEntity<String> ReportIdNotFoundException(ReportIdNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
 }
