@@ -3,17 +3,23 @@ package com.cosmost.project.board.service;
 import com.cosmost.project.board.exception.CategoryNotFoundException;
 import com.cosmost.project.board.exception.ReportIdNotFoundException;
 import com.cosmost.project.board.infrastructure.entity.ReportCategoryEntity;
-import com.cosmost.project.board.model.Report;
-import com.cosmost.project.board.requestbody.UpdateReportCategoryRequest;
-import com.cosmost.project.board.requestbody.UpdateReportRequest;
 import com.cosmost.project.board.infrastructure.entity.ReportEntity;
 import com.cosmost.project.board.infrastructure.repository.ReportCategoryEntityRepository;
 import com.cosmost.project.board.infrastructure.repository.ReportEntityRepository;
+import com.cosmost.project.board.model.Report;
+import com.cosmost.project.board.model.ReportCategory;
 import com.cosmost.project.board.requestbody.CreateReportCategoryRequest;
 import com.cosmost.project.board.requestbody.CreateReportRequest;
+import com.cosmost.project.board.requestbody.UpdateReportCategoryRequest;
+import com.cosmost.project.board.requestbody.UpdateReportRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,16 +48,49 @@ public class ReportServiceImpl implements ReportService {
 
             reportCategoryEntityRepository.save(categoryRequest.createCategoryDtoToEntity
                     (createReportRequest.getReportCategoryName(), reportEntity));
-
         } else {
             throw new CategoryNotFoundException();
         }
     }
 
     @Override
+    public List<Report> readMyReport() {
+
+        HttpServletRequest request = ((ServletRequestAttributes)
+                RequestContextHolder.currentRequestAttributes()).getRequest();
+        Long id = Long.parseLong(request.getHeader("Authorization"));
+
+        List<ReportEntity> reportEntityList = reportEntityRepository.findAllByReporterId(id);
+        List<Report> reportList = new ArrayList<>();
+
+        reportEntityList.forEach(reportEntity -> {
+
+            List<ReportCategoryEntity> reportCategoryEntityList =
+                    reportCategoryEntityRepository.findByReport_Id(reportEntity.getId());
+            List<ReportCategory> reportCategoryList = new ArrayList<>();
+
+            reportCategoryEntityList.forEach(reportCategoryEntity -> {
+                reportCategoryList.add(ReportCategory.builder()
+                        .id(reportCategoryEntity.getId())
+                        .reportCategoryName(reportCategoryEntity.getReportCategoryName())
+                        .build());
+            });
+
+            reportList.add(Report.builder()
+                    .id(reportEntity.getId())
+                    .reporterId(reportEntity.getReporterId())
+                    .reportTitle(reportEntity.getReportTitle())
+                    .reportContent(reportEntity.getReportContent())
+                    .reportCategoryList(reportCategoryList)
+                    .build());
+
+        });
+        return reportList;
+    }
+
+    @Override
     public void updateReport(Long id, UpdateReportRequest updateReportRequest) {
         doUpdateReport(id, updateReportRequest);
-
     }
 
     private ReportEntity doUpdateReport(Long id, UpdateReportRequest updateReportRequest) {
