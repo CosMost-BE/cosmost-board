@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    username: root
+    url: jdbc:mysql://localhost:3306/cosmost_db
+    #    url: jdbc:mysql://localhost:3308/cosmost_db
+    password: '1234'
