@@ -18,7 +18,7 @@ public class ReportCategoryEntity {
 
     private String reportCategoryName;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ReportEntity report;
 
     @Builder
