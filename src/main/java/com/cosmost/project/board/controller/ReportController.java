@@ -1,5 +1,6 @@
 package com.cosmost.project.board.controller;
 
+import com.cosmost.project.board.model.Report;
 import com.cosmost.project.board.requestbody.CreateReportRequest;
 import com.cosmost.project.board.requestbody.UpdateReportRequest;
 import com.cosmost.project.board.service.ReportService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -36,6 +38,15 @@ public class ReportController {
     public ResponseEntity<String> createReport(@Valid @RequestBody CreateReportRequest request) {
         reportService.createReport(request);
         return ResponseEntity.ok().body("신고가 등록 되었습니다.");
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<Report>> readMyReport(@RequestParam(value = "filter") String filter) {
+
+        if(filter.equals("auth")) {
+            return ResponseEntity.status(200).body(reportService.readMyReport());
+        }
+        return null;
     }
 
     @PutMapping("/{id}")
