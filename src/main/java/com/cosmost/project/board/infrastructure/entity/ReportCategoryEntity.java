@@ -18,9 +18,8 @@ public class ReportCategoryEntity {
 
     private String reportCategoryName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ReportEntity report;
-
 
     @Builder
     public ReportCategoryEntity(Long id, String reportCategoryName, ReportEntity report) {
