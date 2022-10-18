@@ -1,5 +1,6 @@
 package com.cosmost.project.board.service;
 
+import com.cosmost.project.board.exception.CategoryIdNotFoundException;
 import com.cosmost.project.board.exception.CategoryNotFoundException;
 import com.cosmost.project.board.exception.ReportIdNotFoundException;
 import com.cosmost.project.board.infrastructure.entity.ReportCategoryEntity;
@@ -91,6 +92,18 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void updateReport(Long id, UpdateReportRequest updateReportRequest) {
         doUpdateReport(id, updateReportRequest);
+    }
+
+    @Override
+    public void deleteReport(Long id) {
+        Optional<ReportEntity> reporterId =
+                Optional.ofNullable(reportEntityRepository.findById(id).orElseThrow(ReportIdNotFoundException::new));
+        Optional<ReportCategoryEntity> reportCategoryId =
+                Optional.ofNullable(reportCategoryEntityRepository.findById(id).orElseThrow(CategoryIdNotFoundException::new));
+
+        if(reporterId.isPresent() && reportCategoryId.isPresent()){
+            reportCategoryEntityRepository.deleteById(id);
+        }
     }
 
     private ReportEntity doUpdateReport(Long id, UpdateReportRequest updateReportRequest) {
