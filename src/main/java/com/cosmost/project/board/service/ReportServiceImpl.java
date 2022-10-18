@@ -1,5 +1,6 @@
 package com.cosmost.project.board.service;
 
+import com.cosmost.project.board.exception.CategoryNotFoundException;
 import com.cosmost.project.board.infrastructure.entity.ReportCategoryEntity;
 import com.cosmost.project.board.infrastructure.entity.ReportEntity;
 import com.cosmost.project.board.infrastructure.repository.ReportCategoryEntityRepository;
@@ -26,7 +27,16 @@ public class ReportServiceImpl implements ReportService{
         ReportEntity reportEntity = reportDtoToEntity(createReportRequest);
         CreateReportCategoryRequest categoryRequest = new CreateReportCategoryRequest();
         reportEntityRepository.save(reportEntity);
-        reportCategoryEntityRepository.save(categoryRequest.reportCategoryDtoToEntity(createReportRequest.getReportCategoryName(), reportEntity));
 
+        if(createReportRequest.getReportCategoryName().equals("사용자 신고")  ||
+                createReportRequest.getReportCategoryName().equals("리뷰신고") ||
+                createReportRequest.getReportCategoryName().equals("사용자 신고")) {
+
+            reportCategoryEntityRepository.save(categoryRequest.reportCategoryDtoToEntity
+                    (createReportRequest.getReportCategoryName(), reportEntity));
+
+        } else {
+            throw new CategoryNotFoundException();
+        }
     }
 }
