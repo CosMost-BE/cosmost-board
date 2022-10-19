@@ -1,6 +1,5 @@
 package com.cosmost.project.board.controller;
 
-import com.cosmost.project.board.model.Report;
 import com.cosmost.project.board.requestbody.CreateReportRequest;
 import com.cosmost.project.board.requestbody.UpdateReportRequest;
 import com.cosmost.project.board.service.ReportService;
@@ -8,19 +7,19 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @CrossOrigin
+@Slf4j
 @RequestMapping("/v1/boards")
 public class ReportController {
 
     private final ReportService reportService;
-
     public ReportController(ReportService reportService) {
         this.reportService = reportService;
     }
@@ -41,12 +40,13 @@ public class ReportController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Report>> readMyReport(@RequestParam(value = "filter") String filter) {
+    public ResponseEntity<?> readMyReport(@RequestParam(value = "filter", required = false) String filter) {
 
-        if(filter.equals("auth")) {
+        if(String.valueOf(filter).equals("auth")) {
             return ResponseEntity.status(200).body(reportService.readMyReport());
+        } else {
+            return ResponseEntity.ok().body(reportService.readAll());
         }
-        return null;
     }
 
     @PutMapping("/{id}")
@@ -58,7 +58,9 @@ public class ReportController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteReport(@PathVariable Long id){
+        log.info(String.valueOf(id));
         reportService.deleteReport(id);
         return ResponseEntity.ok().body("신고가 삭제 되었습니다.");
     }
+
 }
