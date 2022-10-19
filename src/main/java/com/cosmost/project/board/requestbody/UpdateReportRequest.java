@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,8 +17,7 @@ public class UpdateReportRequest {
     private Long id;
     private String reportTitle;
     private String reportContent;
-    private String reportCategoryName;
 
-
+    private List<UpdateReportCategoryListRequest> updateReportCategoryListRequestList;
 
 }
