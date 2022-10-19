@@ -32,4 +32,9 @@ public class ReportControllerAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
+    @ExceptionHandler(CategoryIdNotFoundException.class)
+    public ResponseEntity<String> CategoryIdNotFoundException(CategoryIdNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
 }
