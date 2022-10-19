@@ -20,14 +20,4 @@ public class CreateReportRequest {
     private String reportCategoryName;
 
     private List<CreateReportCategoryListRequest> createReportCategoryListRequestList;
-
-    public ReportEntity createDtoToEntity(CreateReportRequest createReportRequest) {
-
-        return ReportEntity.builder()
-                .reporterId(createReportRequest.getReporterId())
-                .reportTitle(createReportRequest.getReportTitle())
-                .reportContent(createReportRequest.getReportContent())
-                .build();
-    }
-
 }
