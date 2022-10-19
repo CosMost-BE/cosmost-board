@@ -55,4 +55,10 @@ public class ReportController {
         reportService.updateReport(id, request);
         return ResponseEntity.ok().body("신고가 수정 되었습니다.");
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteReport(@PathVariable Long id){
+        reportService.deleteReport(id);
+        return ResponseEntity.ok().body("신고가 삭제 되었습니다.");
+    }
 }

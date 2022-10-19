@@ -12,6 +12,7 @@ public interface ReportService {
     void createReport(CreateReportRequest createReportRequest);
     List<Report> readMyReport();
     void updateReport(Long id, UpdateReportRequest updateReportRequest);
+    void deleteReport(Long id);
 
     List<Report> readAll();
 
