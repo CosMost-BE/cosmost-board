@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ReportCategoryEntityRepository extends JpaRepository<ReportCategoryEntity, Long> {
-    List<ReportCategoryEntity> findByReport_Id(Long id);
+
 }
