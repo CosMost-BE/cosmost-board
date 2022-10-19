@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ReportCategoryLisEntitytRepository extends JpaRepository<ReportCategoryListEntity, Long> {
+public interface ReportCategoryListEntitytRepository extends JpaRepository<ReportCategoryListEntity, Long> {
     List<ReportCategoryListEntity> findByReport_Id(Long id);
 }
