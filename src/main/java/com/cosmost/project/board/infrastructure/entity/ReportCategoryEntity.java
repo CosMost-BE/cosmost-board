@@ -18,14 +18,10 @@ public class ReportCategoryEntity {
 
     private String reportCategoryName;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private ReportEntity report;
-
     @Builder
-    public ReportCategoryEntity(Long id, String reportCategoryName, ReportEntity report) {
+    public ReportCategoryEntity(Long id, String reportCategoryName) {
         this.id = id;
         this.reportCategoryName = reportCategoryName;
-        this.report = report;
     }
 
 }

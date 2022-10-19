@@ -1,9 +1,12 @@
 package com.cosmost.project.board.requestbody;
 
+import com.cosmost.project.board.infrastructure.entity.ReportEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -16,4 +19,5 @@ public class CreateReportRequest {
     private String reportContent;
     private String reportCategoryName;
 
+    private List<CreateReportCategoryListRequest> createReportCategoryListRequestList;
 }

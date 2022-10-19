@@ -14,6 +14,8 @@ public interface ReportService {
     void updateReport(Long id, UpdateReportRequest updateReportRequest);
     void deleteReport(Long id);
 
+    List<Report> readAll();
+
     default ReportEntity createDtoToEntity(CreateReportRequest createReportRequest){
 
         ReportEntity reportEntity = ReportEntity.builder()
@@ -24,6 +26,7 @@ public interface ReportService {
 
         return reportEntity;
     }
+
 
 
 
