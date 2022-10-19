@@ -1,9 +1,10 @@
 package com.cosmost.project.board.service;
 
-import com.cosmost.project.board.model.Report;
-import com.cosmost.project.board.requestbody.UpdateReportRequest;
+import com.cosmost.project.board.infrastructure.entity.ReportCategoryEntity;
 import com.cosmost.project.board.infrastructure.entity.ReportEntity;
+import com.cosmost.project.board.model.Report;
 import com.cosmost.project.board.requestbody.CreateReportRequest;
+import com.cosmost.project.board.requestbody.UpdateReportRequest;
 
 import java.util.List;
 
@@ -13,8 +14,7 @@ public interface ReportService {
     List<Report> readMyReport();
     void updateReport(Long id, UpdateReportRequest updateReportRequest);
     void deleteReport(Long id);
-
-    List<Report> readAll();
+    List<ReportCategoryEntity> readAll();
 
     default ReportEntity createDtoToEntity(CreateReportRequest createReportRequest){
 
