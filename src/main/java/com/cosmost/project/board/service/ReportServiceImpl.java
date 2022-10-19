@@ -1,13 +1,12 @@
 package com.cosmost.project.board.service;
 
 import com.cosmost.project.board.exception.CategoryIdNotFoundException;
-import com.cosmost.project.board.exception.CategoryNotFoundException;
 import com.cosmost.project.board.exception.ReportIdNotFoundException;
 import com.cosmost.project.board.infrastructure.entity.ReportCategoryEntity;
 import com.cosmost.project.board.infrastructure.entity.ReportCategoryListEntity;
 import com.cosmost.project.board.infrastructure.entity.ReportEntity;
 import com.cosmost.project.board.infrastructure.repository.ReportCategoryEntityRepository;
-import com.cosmost.project.board.infrastructure.repository.ReportCategoryLisEntitytRepository;
+import com.cosmost.project.board.infrastructure.repository.ReportCategoryListEntitytRepository;
 import com.cosmost.project.board.infrastructure.repository.ReportEntityRepository;
 import com.cosmost.project.board.model.Report;
 import com.cosmost.project.board.model.ReportCategory;
@@ -31,15 +30,15 @@ public class ReportServiceImpl implements ReportService {
     private final ReportEntityRepository reportEntityRepository;
     private final ReportCategoryEntityRepository reportCategoryEntityRepository;
 
-    private final ReportCategoryLisEntitytRepository reportCategoryLisEntitytRepository;
+    private final ReportCategoryListEntitytRepository reportCategoryListEntitytRepository;
 
     @Autowired
     public ReportServiceImpl(ReportEntityRepository reportEntityRepository,
                              ReportCategoryEntityRepository reportCategoryEntityRepository,
-                             ReportCategoryLisEntitytRepository reportCategoryLisEntitytRepository) {
+                             ReportCategoryListEntitytRepository reportCategoryListEntitytRepository) {
         this.reportEntityRepository = reportEntityRepository;
         this.reportCategoryEntityRepository = reportCategoryEntityRepository;
-        this.reportCategoryLisEntitytRepository = reportCategoryLisEntitytRepository;
+        this.reportCategoryListEntitytRepository = reportCategoryListEntitytRepository;
     }
 
     @Override
@@ -51,7 +50,7 @@ public class ReportServiceImpl implements ReportService {
         for (CreateReportCategoryListRequest categoryListRequest : createReportRequest.getCreateReportCategoryListRequestList()) {
             Optional<ReportCategoryEntity> reportCategory = reportCategoryEntityRepository.findById(categoryListRequest.getReportCategory());
 
-            reportCategoryLisEntitytRepository.save(categoryListRequest.createCategoryDtoToEntity(reportEntity, reportCategory.get()));
+            reportCategoryListEntitytRepository.save(categoryListRequest.createCategoryDtoToEntity(reportEntity, reportCategory.get()));
         }
     }
 
@@ -68,7 +67,7 @@ public class ReportServiceImpl implements ReportService {
         reportEntityList.forEach(reportEntity -> {
 
             List<ReportCategoryListEntity> reportCategoryListEntityList =
-                    reportCategoryLisEntitytRepository.findByReport_Id(reportEntity.getId());
+                    reportCategoryListEntitytRepository.findByReport_Id(reportEntity.getId());
             List<ReportCategory> reportCategoryList = new ArrayList<>();
 
             reportCategoryListEntityList.forEach(reportCategoryEntity -> {
@@ -101,16 +100,14 @@ public class ReportServiceImpl implements ReportService {
 
         return null;
     }
-    
+
     @Override
     public void deleteReport(Long id) {
-        Optional<ReportEntity> reporterId =
-                Optional.ofNullable(reportEntityRepository.findById(id).orElseThrow(ReportIdNotFoundException::new));
-        Optional<ReportCategoryEntity> reportCategoryId =
-                Optional.ofNullable(reportCategoryEntityRepository.findById(id).orElseThrow(CategoryIdNotFoundException::new));
+        Optional<ReportCategoryListEntity> reportCategoryId =
+                Optional.ofNullable(reportCategoryListEntitytRepository.findById(id).orElseThrow(CategoryIdNotFoundException::new));
 
-        if(reporterId.isPresent() && reportCategoryId.isPresent()){
-            reportCategoryEntityRepository.deleteById(id);
+        if ( reportCategoryId.isPresent()) {
+            reportCategoryListEntitytRepository.deleteById(id);
         }
     }
 
@@ -133,7 +130,7 @@ public class ReportServiceImpl implements ReportService {
                 Optional<ReportCategoryEntity> reportCategory =
                         reportCategoryEntityRepository.findById(updateReportCategoryListRequest.getReportCategory());
 
-                reportCategoryLisEntitytRepository.save(ReportCategoryListEntity.builder()
+                reportCategoryListEntitytRepository.save(ReportCategoryListEntity.builder()
                         .id(updatedReport.getId())
                         .report(updatedReport)
                         .reportCategory(reportCategory.get())
