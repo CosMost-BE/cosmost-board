@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ReportCategoryLisEntitytRepository extends JpaRepository<ReportCategoryListEntity, Long> {
-    List<ReportCategoryEntity> findByReport_Id(Long id);
+    List<ReportCategoryListEntity> findByReport_Id(Long id);
 }
