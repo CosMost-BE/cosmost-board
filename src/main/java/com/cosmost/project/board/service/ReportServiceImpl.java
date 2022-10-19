@@ -1,14 +1,14 @@
 package com.cosmost.project.board.service;
 
-import com.cosmost.project.board.exception.CategoryNotFoundException;
 import com.cosmost.project.board.exception.ReportIdNotFoundException;
 import com.cosmost.project.board.infrastructure.entity.ReportCategoryEntity;
 import com.cosmost.project.board.infrastructure.entity.ReportEntity;
 import com.cosmost.project.board.infrastructure.repository.ReportCategoryEntityRepository;
+import com.cosmost.project.board.infrastructure.repository.ReportCategoryLisEntitytRepository;
 import com.cosmost.project.board.infrastructure.repository.ReportEntityRepository;
 import com.cosmost.project.board.model.Report;
 import com.cosmost.project.board.model.ReportCategory;
-import com.cosmost.project.board.requestbody.CreateReportCategoryRequest;
+import com.cosmost.project.board.requestbody.CreateReportCategoryListRequest;
 import com.cosmost.project.board.requestbody.CreateReportRequest;
 import com.cosmost.project.board.requestbody.UpdateReportCategoryRequest;
 import com.cosmost.project.board.requestbody.UpdateReportRequest;
@@ -28,28 +28,27 @@ public class ReportServiceImpl implements ReportService {
     private final ReportEntityRepository reportEntityRepository;
     private final ReportCategoryEntityRepository reportCategoryEntityRepository;
 
+    private final ReportCategoryLisEntitytRepository reportCategoryLisEntitytRepository;
+
     @Autowired
     public ReportServiceImpl(ReportEntityRepository reportEntityRepository,
-                             ReportCategoryEntityRepository reportCategoryEntityRepository) {
+                             ReportCategoryEntityRepository reportCategoryEntityRepository,
+                             ReportCategoryLisEntitytRepository reportCategoryLisEntitytRepository) {
         this.reportEntityRepository = reportEntityRepository;
         this.reportCategoryEntityRepository = reportCategoryEntityRepository;
+        this.reportCategoryLisEntitytRepository = reportCategoryLisEntitytRepository;
     }
 
     @Override
     public void createReport(CreateReportRequest createReportRequest) {
 
         ReportEntity reportEntity = createDtoToEntity(createReportRequest);
-        CreateReportCategoryRequest categoryRequest = new CreateReportCategoryRequest();
         reportEntityRepository.save(reportEntity);
 
-        if (createReportRequest.getReportCategoryName().equals("사용자 신고") ||
-                createReportRequest.getReportCategoryName().equals("리뷰신고") ||
-                createReportRequest.getReportCategoryName().equals("코스 신고")) {
+        for (CreateReportCategoryListRequest categoryListRequest : createReportRequest.getCreateReportCategoryListRequestList()) {
+            Optional<ReportCategoryEntity> reportCategory = reportCategoryEntityRepository.findById(categoryListRequest.getReportCategory());
 
-            reportCategoryEntityRepository.save(categoryRequest.createCategoryDtoToEntity
-                    (createReportRequest.getReportCategoryName(), reportEntity));
-        } else {
-            throw new CategoryNotFoundException();
+            reportCategoryLisEntitytRepository.save(categoryListRequest.createCategoryDtoToEntity(reportEntity, reportCategory.get()));
         }
     }
 
@@ -66,7 +65,7 @@ public class ReportServiceImpl implements ReportService {
         reportEntityList.forEach(reportEntity -> {
 
             List<ReportCategoryEntity> reportCategoryEntityList =
-                    reportCategoryEntityRepository.findByReport_Id(reportEntity.getId());
+                    reportCategoryLisEntitytRepository.findByReport_Id(reportEntity.getId());
             List<ReportCategory> reportCategoryList = new ArrayList<>();
 
             reportCategoryEntityList.forEach(reportCategoryEntity -> {
@@ -91,6 +90,13 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void updateReport(Long id, UpdateReportRequest updateReportRequest) {
         doUpdateReport(id, updateReportRequest);
+    }
+
+    @Override
+    public List<Report> readAll() {
+
+
+        return null;
     }
 
     private ReportEntity doUpdateReport(Long id, UpdateReportRequest updateReportRequest) {
