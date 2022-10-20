@@ -114,7 +114,7 @@ public class ReportServiceImpl implements ReportService {
                 reportCategoryListEntitytRepository.findByReport_Id(reportId.get().getId());
 
         for (ReportCategoryListEntity temp : reportCategoryListEntity) {
-            reportCategoryListEntitytRepository.deleteById(temp.getId()); // 28 번
+            reportCategoryListEntitytRepository.deleteById(temp.getId());
         }
         reportEntityRepository.deleteById(id);
     }
