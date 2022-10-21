@@ -1,11 +1,11 @@
 package com.cosmost.project.board.requestbody;
 
-import com.cosmost.project.board.infrastructure.entity.ReportEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -18,6 +18,7 @@ public class CreateReportRequest {
     private String reportTitle;
     private String reportContent;
     private String reportCategoryName;
+    private LocalDate createdAt;
 
     private List<CreateReportCategoryListRequest> createReportCategoryListRequestList;
 }
