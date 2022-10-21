@@ -14,8 +14,10 @@ import com.cosmost.project.board.requestbody.CreateReportCategoryListRequest;
 import com.cosmost.project.board.requestbody.CreateReportRequest;
 import com.cosmost.project.board.requestbody.UpdateReportCategoryListRequest;
 import com.cosmost.project.board.requestbody.UpdateReportRequest;
+import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -30,9 +32,11 @@ import java.util.Optional;
 @Slf4j
 public class ReportServiceImpl implements ReportService {
 
+    @Value("${jwt.secret}")
+    private String secretKey;
+
     private final ReportEntityRepository reportEntityRepository;
     private final ReportCategoryEntityRepository reportCategoryEntityRepository;
-
     private final ReportCategoryListEntitytRepository reportCategoryListEntitytRepository;
 
     @Autowired
@@ -47,7 +51,17 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void createReport(CreateReportRequest createReportRequest) {
 
-        ReportEntity reportEntity = createDtoToEntity(createReportRequest);
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+
+        String token = request.getHeader("Authorization");
+        Long authorId = Long.parseLong(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject());
+
+        ReportEntity reportEntity = ReportEntity.builder()
+                .reporterId(authorId)
+                .reportTitle(createReportRequest.getReportTitle())
+                .reportContent(createReportRequest.getReportContent())
+                .createdAt(createReportRequest.getCreatedAt())
+                .build();
         reportEntityRepository.save(reportEntity);
 
         for (CreateReportCategoryListRequest categoryListRequest : createReportRequest.getCreateReportCategoryListRequestList()) {
@@ -63,9 +77,11 @@ public class ReportServiceImpl implements ReportService {
 
         HttpServletRequest request = ((ServletRequestAttributes)
                 RequestContextHolder.currentRequestAttributes()).getRequest();
-        Long id = Long.parseLong(request.getHeader("Authorization"));
+        String token = request.getHeader("Authorization");
+        Long reporterId = Long.parseLong(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject());
 
-        List<ReportEntity> reportEntityList = reportEntityRepository.findAllByReporterId(id);
+
+        List<ReportEntity> reportEntityList = reportEntityRepository.findAllByReporterId(Long.valueOf(reporterId));
         List<Report> reportList = new ArrayList<>();
 
         reportEntityList.forEach(reportEntity -> {
@@ -121,15 +137,19 @@ public class ReportServiceImpl implements ReportService {
 
     private ReportEntity doUpdateReport(Long id, UpdateReportRequest updateReportRequest) {
 
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+
+        String token = request.getHeader("Authorization");
+        Long reporterId = Long.parseLong(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject());
+
         Optional<ReportEntity> reportEntity = Optional.of(reportEntityRepository.findById(id)
                 .orElseThrow(ReportIdNotFoundException::new));
-
 
         if (reportEntity.isPresent()) {
 
             ReportEntity updatedReport = reportEntityRepository.save(ReportEntity.builder()
                     .id(id)
-                    .reporterId(reportEntity.get().getReporterId())
+                    .reporterId(Long.valueOf(reporterId))
                     .reportTitle(updateReportRequest.getReportTitle())
                     .reportContent(updateReportRequest.getReportContent())
                     .build());
@@ -139,7 +159,7 @@ public class ReportServiceImpl implements ReportService {
                         reportCategoryEntityRepository.findById(updateReportCategoryListRequest.getReportCategory());
 
                 reportCategoryListEntitytRepository.save(ReportCategoryListEntity.builder()
-                        .id(updatedReport.getId())
+                        .id(id)
                         .report(updatedReport)
                         .reportCategory(reportCategory.get())
                         .build());
