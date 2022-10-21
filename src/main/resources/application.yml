@@ -19,3 +19,7 @@ spring:
     show-sql: 'true'
   profiles:
     include: localdb
+
+jwt:
+  tokenValidTime: 1800000
+  secret: COS-MOST-TEAM-SECRET-KEY
