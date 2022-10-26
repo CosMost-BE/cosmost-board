@@ -16,8 +16,6 @@ import java.util.List;
 public class Report {
 
     private Long id;
-    private String aaa;
-
     private Long reporterId;
 
     private String reportTitle;
