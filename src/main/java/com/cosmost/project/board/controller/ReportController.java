@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 public class ReportController {
 
     private final ReportService reportService;
+    @Autowired
     public ReportController(ReportService reportService) {
         this.reportService = reportService;
     }
@@ -58,7 +60,6 @@ public class ReportController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteReport(@PathVariable Long id){
-        log.info(String.valueOf(id));
         reportService.deleteReport(id);
         return ResponseEntity.ok().body("신고가 삭제 되었습니다.");
     }

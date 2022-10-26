@@ -16,20 +16,6 @@ public interface ReportService {
     void deleteReport(Long id);
     List<ReportCategoryEntity> readAll();
 
-    default ReportEntity createDtoToEntity(CreateReportRequest createReportRequest){
-
-        ReportEntity reportEntity = ReportEntity.builder()
-                .reporterId(createReportRequest.getReporterId())
-                .reportTitle(createReportRequest.getReportTitle())
-                .reportContent(createReportRequest.getReportContent())
-                .build();
-
-        return reportEntity;
-    }
-
-
-
-
 
 
 }
