@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CreateReportCategoryListRequest {
-    private String test;
+
     private Long report;
     private Long reportCategory;
 
