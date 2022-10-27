@@ -4,16 +4,11 @@ pipeline {
            ECR_REPO = "347222812711.dkr.ecr.ap-northeast-2.amazonaws.com/cosmost-ecr"
            AWS_CREDENTIALS="cosmost_aws_credentials"
            GIT_CREDENTIAL_ID = "cosmost_JenkinsKey"
-           NAME = "hello"
+           NAME = "cosmost-ecr"
            VERSION = "${env.BUILD_ID}-${env.GIT_COMMIT}"
            GIT_URL="https://github.com/CosMost-BE/cosmost-board.git"
         }
     stages {
-         stage('Pull') {
-                steps {
-                    git url:"${GIT_URL}", branch:"master", poll:true, changelog:true,credentialsId: "${GIT_CREDENTIAL_ID}"
-                }
-            }
         stage('Git Clone') {
             steps {
                 script {
