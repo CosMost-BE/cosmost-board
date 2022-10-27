@@ -20,21 +20,6 @@ pipeline {
                     sh "docker tag ${NAME}:latest ${ECR_REPO}/${NAME}:latest"
                 }
             }
-        stage('Git Clone') {
-            steps {
-                script {
-                    try {
-                        git url: "https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/cosmost-Jenkins", branch: "feature/report-fix", credentialsId: '${GIT_CREDENTIALS_ID}'
-                        sh "sudo rm -rf ./.git"
-                        env.cloneResult=true
-                    } catch (error) {
-                        print(error)
-                        env.cloneResult=false
-                        currentBuild.result = 'FAILURE'
-                    }
-                }
-            }
-        }
         stage('ECR Upload') {
             steps{
                 script{
