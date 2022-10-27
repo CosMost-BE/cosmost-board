@@ -8,6 +8,18 @@ pipeline {
            GIT_URL="https://github.com/CosMost-BE/cosmost-board.git"
         }
     stages {
+         stages {
+            stage('Pull') {
+                steps {
+                    git url:"${GIT_URL}", branch:"/feature/report-fix", poll:true, changelog:true,credentialsId: "${GIT_CREDENTIAL_ID}"
+                }
+            }
+        stage('Build') {
+                steps {
+                    sh "docker build -t ${NAME} ."
+                    sh "docker tag ${NAME}:latest ${ECR_REPO}/${NAME}:latest"
+                }
+            }
         stage('Git Clone') {
             steps {
                 script {
