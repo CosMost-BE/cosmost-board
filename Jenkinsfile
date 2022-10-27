@@ -24,7 +24,7 @@ pipeline{
                 script{
                     try{
                         withAWS(credentials: "${AWS_CREDENTIALS}", role: 'arn:aws:iam::347222812711:user/cosmost-depoly', roleAccount: "deploy_user", externalId: 'externalId'){
-                            sh "aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin "347222812711.dkr.ecr.ap-northeast-2.amazonaws.com/cosmost-ecr"
+                            sh 'aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 347222812711.dkr.ecr.ap-northeast-2.amazonaws.com'
                             sh "docker push ${ECR_REPO}/${NAME}:latest"
                         }
                     }catch(error){
