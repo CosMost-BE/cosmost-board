@@ -10,7 +10,7 @@ pipeline{
     stages {
         stage('Pull') {
             steps {
-                git url:"${GIT_URL}", branch:"master", poll:true, changelog:true,credentialsId: "${GIT_CREDENTIAL_ID}"
+                git url:"${GIT_URL}", branch:"/feature/report-fix", poll:true, changelog:true,credentialsId: "${GIT_CREDENTIAL_ID}"
             }
         }
         stage('Build') {
