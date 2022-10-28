@@ -7,10 +7,13 @@
 
 FROM openjdk:17-ea-11-jdk-slim
 
+COPY ./ ./
 RUN chmod 755 gradlew
 RUN ./gradlew build -x test
 
 COPY build/libs/cosmost-board-1.0.jar BoardService.jar
+
+
 ENV TZ Asia/Seoul
 
 EXPOSE 9005
