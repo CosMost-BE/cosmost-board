@@ -77,14 +77,22 @@ pipeline{
                   echo 'Empty'
             }
         }
-        stage('Deploy') {
+        stage('ECR Upload') {
             steps {
                 script{
                     sh 'rm  ~/.dockercfg || true'
                     sh 'rm ~/.docker/config.json || true'
                     docker.withRegistry("https://${ECR_REPO_URI}", "ecr:ap-northeast-2:${AWS_CREDENTIALS}") {
                     app.push("${env.BUILD_NUMBER}")
-                    app.push("latest")
+                    app.push("board-service")
+                    }
+                }
+            }
+        stage('Deploy') {
+            steps {
+                script{
+
+
                     }
                 }
             }
