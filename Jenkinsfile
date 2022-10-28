@@ -12,7 +12,7 @@ pipeline{
     stages {
         stage('Pull') {
             steps {
-                git url:"${GIT_URL}", branch:"/feature/report-fix",
+                git url:"${GIT_URL}", branch:"*/feature/report-fix",
                 poll:true,
                 changelog:true,
                 credentialsId: "${GIT_CREDENTIAL_ID}"
