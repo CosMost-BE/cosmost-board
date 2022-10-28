@@ -1,8 +1,5 @@
 pipeline{
     agent any
-    tools {
-      git "git"
-    }
     environment {
         ECR_REPO = "347222812711.dkr.ecr.ap-northeast-2.amazonaws.com/cosmost-ecr"
         AWS_CREDENTIALS="cosmost_aws_credentials"
