@@ -56,6 +56,9 @@ pipeline{
         environment {
         ECR_REPO_URI = "347222812711.dkr.ecr.ap-northeast-2.amazonaws.com/cosmost-ecr"
         AWS_CREDENTIALS="TEST_CICD_JENKINS"
+        CLUSTER_NAME="cosmost"
+        SERVICE_NAME="ecs-service"
+        REGION="ap-northeast-2"
     }
     stages {
           stage('Clone repository') {
@@ -89,5 +92,14 @@ pipeline{
                 }
             }
         }
-    }
+        stage('Deploy to ECS') {
+            steps {
+               script {
+                   withAWS(region: "${REGION}", credentials: "${AWS_CREDENTIALS}") {
+                     sh "aws ecs update-service --region ${REGION} --cluster ${CLUSTER_NAME} --service ${SERVICE_NAME} --force-new-deployment"
+                   }
+               }
+           }
+       }
+   }
 }
