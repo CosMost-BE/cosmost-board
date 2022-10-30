@@ -15,7 +15,6 @@ RUN chmod 755 gradlew
 RUN ./gradlew build -x test
 
 COPY  ${JAR_FIlE} BoardService.jar
-#COPY ${JAR_FILE} BoardService.jar
 ENTRYPOINT ["java", "-jar", "BoardService.jar"]
 
 
