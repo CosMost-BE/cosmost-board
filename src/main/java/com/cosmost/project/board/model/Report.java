@@ -19,6 +19,7 @@ public class Report {
     private Long reporterId;
 
     private String reportTitle;
+    private String jenkinstest;
 
     private String reportContent;
     private LocalDate createdAt;
