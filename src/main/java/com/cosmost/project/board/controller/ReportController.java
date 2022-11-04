@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,10 +43,11 @@ public class ReportController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> readMyReport(@RequestParam(value = "filter", required = false) String filter) {
+    public ResponseEntity<?> readMyReport(@RequestParam(value = "filter", required = false) String filter,
+                                          Pageable pageable) {
 
         if(String.valueOf(filter).equals("auth")) {
-            return ResponseEntity.status(200).body(reportService.readMyReport());
+            return ResponseEntity.status(200).body(reportService.readMyReport(pageable));
         } else {
             return ResponseEntity.ok().body(reportService.readAll());
         }
