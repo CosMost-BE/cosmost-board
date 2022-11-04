@@ -53,7 +53,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void createReport(CreateReportRequest createReportRequest) {
 
-        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
         String token = request.getHeader("Authorization");
         Long authorId = Long.parseLong(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject());
@@ -140,21 +140,24 @@ public class ReportServiceImpl implements ReportService {
 
     private ReportEntity doUpdateReport(Long id, UpdateReportRequest updateReportRequest) {
 
-        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
         String token = request.getHeader("Authorization");
         Long reporterId = Long.parseLong(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject());
 
-        try {
+        Optional<ReportEntity> savedReporterId = reportEntityRepository.findById(id);
 
+        try {
             Optional<ReportEntity> reportEntity = Optional.ofNullable(Optional.of(reportEntityRepository.findByReporterIdAndId(reporterId, id))
                     .orElseThrow(ReportIdNotFoundException::new));
 
-            if (reportEntity.isPresent()) {
+
+            if (reportEntity.isPresent() && reporterId.equals(savedReporterId.get().getReporterId())) {
+
 
                 ReportEntity updatedReport = reportEntityRepository.save(ReportEntity.builder()
                         .id(id)
-                        .reporterId(Long.valueOf(reporterId))
+                        .reporterId(reportEntity.get().getReporterId())
                         .reportTitle(updateReportRequest.getReportTitle())
                         .reportContent(updateReportRequest.getReportContent())
                         .build());
