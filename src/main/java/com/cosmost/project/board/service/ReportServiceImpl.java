@@ -125,17 +125,23 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional
-    public void deleteReport(Long id) {
-        Optional<ReportEntity> reportId = Optional.ofNullable(reportEntityRepository
-                .findById(id).orElseThrow(ReportIdNotFoundException::new));
+    public void deleteReport(Long reportId) {
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+
+        String token = request.getHeader("Authorization");
+        Long reporterId = Long.parseLong(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject());
+
+        Optional<ReportEntity> reportEntity = Optional.ofNullable(Optional.ofNullable(reportEntityRepository
+                .findByReporterId(reporterId)).orElseThrow(ReportIdNotFoundException::new));
 
         List<ReportCategoryListEntity> reportCategoryListEntity =
-                reportCategoryListEntitytRepository.findByReport_Id(reportId.get().getId());
+                reportCategoryListEntitytRepository.findByReport_Id(reportEntity.get().getReporterId());
 
         for (ReportCategoryListEntity temp : reportCategoryListEntity) {
             reportCategoryListEntitytRepository.deleteById(temp.getId());
         }
-        reportEntityRepository.deleteById(id);
+        reportEntityRepository.deleteById(reportId);
     }
 
     private ReportEntity doUpdateReport(Long id, UpdateReportRequest updateReportRequest) {
