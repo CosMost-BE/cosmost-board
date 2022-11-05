@@ -16,11 +16,9 @@ import java.util.List;
 public class Report {
 
     private Long id;
-
     private Long reporterId;
 
     private String reportTitle;
-
     private String reportContent;
     private LocalDate createdAt;
     private List<ReportCategory> reportCategoryList;
