@@ -1,6 +1,8 @@
 spring:
   datasource:
-    username: root
-    url: jdbc:mysql://localhost:3306/cosmost_db
-    #    url: jdbc:mysql://localhost:3308/cosmost_db
+    username: ksh
+    url: jdbc:mysql://3.38.146.80:3306/cosmost   # // EC2
+#    url: jdbc:mysql://localhost:3306/cosmost_db // 로컬
+    #    url: jdbc:mysql://localhost:3308/cosmost_db // 집
     password: '1234'
+
