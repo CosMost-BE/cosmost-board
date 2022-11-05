@@ -133,7 +133,7 @@ public class ReportServiceImpl implements ReportService {
         Long reporterId = Long.parseLong(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject());
 
         Optional<ReportEntity> reportEntity = Optional.ofNullable(Optional.ofNullable(reportEntityRepository
-                .findByReporterId(reporterId)).orElseThrow(ReportIdNotFoundException::new));
+                .findByReporterIdAndId(reporterId, reportId)).orElseThrow(ReportIdNotFoundException::new));
 
         List<ReportCategoryListEntity> reportCategoryListEntity =
                 reportCategoryListEntitytRepository.findByReport_Id(reportEntity.get().getReporterId());
