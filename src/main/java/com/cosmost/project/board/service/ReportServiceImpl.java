@@ -169,13 +169,13 @@ public class ReportServiceImpl implements ReportService {
 
                 for (UpdateReportCategoryListRequest updateReportCategoryListRequest : updateReportRequest.getUpdateReportCategoryListRequestList()) {
 
-                    List<ReportCategoryListEntity> aaa = reportCategoryListEntitytRepository.findByReport_Id(id);
+                    List<ReportCategoryListEntity> reportCategoryListEntityListId = reportCategoryListEntitytRepository.findByReport_Id(id);
 
                     Optional<ReportCategoryEntity> reportCategory =
                             reportCategoryEntityRepository.findById(updateReportCategoryListRequest.getReportCategory());
 
                     reportCategoryListEntitytRepository.save(ReportCategoryListEntity.builder()
-                            .id(aaa.get(0).getId())
+                            .id(reportCategoryListEntityListId.get(0).getId())
                             .report(updatedReport)
                             .reportCategory(reportCategory.get())
                             .build());
