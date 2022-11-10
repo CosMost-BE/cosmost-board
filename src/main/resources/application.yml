@@ -1,0 +1,25 @@
+server:
+  port: 9005
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: board-service
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+  profiles:
+    include: localdb
+
+jwt:
+  tokenValidTime: 1800000
+  secret: COS-MOST-TEAM-SECRET-KEY
