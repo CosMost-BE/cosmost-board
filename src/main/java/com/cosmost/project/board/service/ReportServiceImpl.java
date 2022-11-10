@@ -147,19 +147,18 @@ public class ReportServiceImpl implements ReportService {
     private ReportEntity doUpdateReport(Long id, UpdateReportRequest updateReportRequest) {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-
         String token = request.getHeader("Authorization");
         Long reporterId = Long.parseLong(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject());
 
         Optional<ReportEntity> savedReporterId = reportEntityRepository.findById(id);
 
         try {
-            Optional<ReportEntity> reportEntity = Optional.ofNullable(Optional.of(reportEntityRepository.findByReporterIdAndId(reporterId, id))
+            Optional<ReportEntity> reportEntity = Optional.ofNullable
+                    (Optional.of(reportEntityRepository.findByReporterIdAndId(reporterId, id))
                     .orElseThrow(ReportIdNotFoundException::new));
 
 
             if (reportEntity.isPresent() && reporterId.equals(savedReporterId.get().getReporterId())) {
-
 
                 ReportEntity updatedReport = reportEntityRepository.save(ReportEntity.builder()
                         .id(id)
@@ -169,11 +168,14 @@ public class ReportServiceImpl implements ReportService {
                         .build());
 
                 for (UpdateReportCategoryListRequest updateReportCategoryListRequest : updateReportRequest.getUpdateReportCategoryListRequestList()) {
+
+                    List<ReportCategoryListEntity> reportCategoryListEntityListId = reportCategoryListEntitytRepository.findByReport_Id(id);
+
                     Optional<ReportCategoryEntity> reportCategory =
                             reportCategoryEntityRepository.findById(updateReportCategoryListRequest.getReportCategory());
 
                     reportCategoryListEntitytRepository.save(ReportCategoryListEntity.builder()
-                            .id(id)
+                            .id(reportCategoryListEntityListId.get(0).getId())
                             .report(updatedReport)
                             .reportCategory(reportCategory.get())
                             .build());
